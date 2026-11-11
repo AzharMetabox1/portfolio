@@ -12,7 +12,7 @@ interface ScrollCharProps {
 function ScrollChar({ char, progress, range }: ScrollCharProps) {
   const opacity = useTransform(progress, range, [0.18, 1]);
   return (
-    <motion.span style={{ opacity }} className="inline-block">
+    <motion.span style={{ opacity, display: 'inline-block' }}>
       {char}
     </motion.span>
   );
@@ -56,10 +56,16 @@ function StatementBlock({ text, textColorClass }: StatementBlockProps) {
       >
         {words.map((word, wordIdx) => {
           const chars = word.split('');
+          const isLastWord = wordIdx === words.length - 1;
           return (
             <span
               key={`${word}-${wordIdx}`}
-              className="inline-block whitespace-nowrap mr-[0.26em] last:mr-0"
+              className="inline-block whitespace-nowrap"
+              style={{
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                marginRight: isLastWord ? '0' : '0.28em',
+              }}
             >
               {chars.map((char, charIdx) => {
                 const index = charCursor++;
@@ -74,6 +80,7 @@ function StatementBlock({ text, textColorClass }: StatementBlockProps) {
                   />
                 );
               })}
+              {!isLastWord && <span className="sr-only">{' '}</span>}
             </span>
           );
         })}
@@ -100,7 +107,7 @@ export default function ScrollNarrative() {
       />
 
       {/* Vertical isolation spacer */}
-      <div className="my-[30vh]" aria-hidden="true" />
+      <div className="my-[30vh]" style={{ marginTop: '30vh', marginBottom: '30vh' }} aria-hidden="true" />
 
       {/* Quote 2: Deep warm slate/charcoal transition #1F1E1C -> #4A4843 with #EFECE6 text */}
       <StatementBlock
@@ -109,7 +116,7 @@ export default function ScrollNarrative() {
       />
 
       {/* Vertical isolation spacer */}
-      <div className="my-[30vh]" aria-hidden="true" />
+      <div className="my-[30vh]" style={{ marginTop: '30vh', marginBottom: '30vh' }} aria-hidden="true" />
 
       {/* Quote 3: Warm stone #8C8980 blending into #EFECE6 alabaster with deep ink #141413 text */}
       <StatementBlock
